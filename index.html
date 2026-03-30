@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>POETRY EXPLORER</title>
+    <link rel="stylesheet" type="text/css" href="./styles/style.css" media="screen" />
+</head>
+    
+<body>
+    <h1>Poetry Explorer</h1>
+    <p>Click an author to explore their work:</p>
+
+    <ul>
+        <li><a href="Gaspara Stampa.html">Gaspara Stampa</a></li>
+         <li><a href="Arcangela Tarbotti.html">Arcangela Tarbotti</a></li>
+          <li><a href="Lucrezia Marinella.html">Lucrezia Marinella</a></li>
+    </ul>   
+</body>
+
+<script src="main.js">
+
+const data = {
+  Gaspara Stampa: {
+    rhyme: "Se Voi volete conoscere il mio signore, di bel e dolce aspetto cercate",
+    translation: "Ladies,if you would seek to know my lord, picture a man pleasing and sweet of aspect" 
+  },
+  Arcangela Tarbotti: {
+    rhyme: "Non mi burlate se io con penna di candida colomba, funesto corvo vi auguro nel vostro Inferno ",
+    translation: "Do not mock me if I, with the pen of a white dove, wish a fatal omen upon you in your Hell"
+  },
+  Lucrezia Marinella: {
+    rhyme: "È adunque primiera, e principal cagione la belleza divina della beltá donnesca, doppo la quale vi concorrono le stelle, il cielo, la natura, e gli elementi."
+    translation: "It is therefore the primary and principal cause, the divine beauty of feminine beauty, after which the stars, the sky, nature, and the elements concur."
+  }
+};
+
+const state = {
+  author1: 0,
+  author2: 0,
+  author3: 0
+};
+
+function showDetails(author) {
+  const container = document.getElementById(author + '-details');
+  const info = data[author];
+
+  state[author]++;
+
+  if (state[author] === 1) {
+    container.innerHTML = `
+      <h3>Poem:</h3>
+      <p>${info.rhyme}</p>
+    `;
+  } else if (state[author] === 2) {
+    container.innerHTML = `
+      <h3>Translation:</h3>
+      <p>${info.translation}</p>
+    `;
+  } else {
+    state[author] = 0;
+    container.innerHTML = "";
+  }
+}
+</script>
+
+</html> 
