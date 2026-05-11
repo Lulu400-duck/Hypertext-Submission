@@ -3,18 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Gaspara Stampa</title>
+    <link rel="stylesheet" type="text/css" href="./styles/style.css" media="screen" />
 </head>
 <body>
-  <h1>Gaspara Stampa</h1>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
-  <p onclick="showDetails('Gaspara Stampa')" class="clickable">
-    "Se Voi volete conoscere il mio signore, di bel e dolce aspetto cercate"
-  </p>
+    <h1>Gaspara Stampa</h1>
 
-  <div id="author1-details"></div>
+    <div class="bio-box bio-open">
+        <p>A Venetian poet considered one of the greatest Italian lyric poets of the Renaissance.
+        She wrote over 300 sonnets inspired by her unrequited love for Count Collaltino di Collalto,
+        published posthumously as <em>Rime</em> (1554). Her work is celebrated for its emotional
+        intensity and female perspective in a male-dominated literary world.</p>
+    </div>
 
-  <a href="index.html" class="translation">Translation</a>   
-    
+    <p class="clickable" onclick="showDetails('stampa')">
+        "Se Voi volete conoscere il mio signore, di bel e dolce aspetto cercate"
+    </p>
+
+    <div id="stampa-details" class="details-box"></div>
+
+    <a href="index.html" class="back">← Back</a>
+
+    <script>
+    const data = {
+      stampa: {
+        rhyme: "Se Voi volete conoscere il mio signore, di bel e dolce aspetto cercate",
+        translation: "Ladies, if you would seek to know my lord, picture a man pleasing and sweet of aspect"
+      }
+    };
+
+    const state = { stampa: 0 };
+
+    function showDetails(author) {
+      const container = document.getElementById(author + '-details');
+      const info = data[author];
+
+      state[author]++;
+
+      container.classList.remove('animate', 'showing-translation');
+      void container.offsetWidth;
+
+      if (state[author] === 1) {
+        playSound('poem'); 
+        container.innerHTML = `
+          <h3>Poem</h3>
+          <p>${info.rhyme}</p>
+          <button class="copy-btn" onclick="copyText('${info.rhyme}', this)">Copy</button>
+        `;
+        container.classList.add('animate');
+      } else if (state[author] === 2) {
+        playSound('translation');
+        container.innerHTML = `
+          <h3>Translation</h3>
+          <p>${info.translation}</p>
+          <button class="copy-btn" onclick="copyText('${info.translation}', this)">Copy</button>
+        `;
+        container.classList.add('animate', 'showing-translation');
+      } else {
+        state[author] = 0;
+        container.innerHTML = "";
+      }
+    }
+
+    function copyText(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied ✓';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+      });
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.querySelector('.theme-toggle').textContent = isDark ? '☀️' : '🌙';
+    }
+
+    (function() {
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark');
+        document.querySelector('.theme-toggle').textContent = '☀️';
+      }
+    })();
+    </script>
+
 </body>
 </html>

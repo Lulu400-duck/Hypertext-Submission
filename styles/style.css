@@ -1,70 +1,514 @@
-body {
-  color: red;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+/* ── Color Variables ── */
+:root {
+  --bg:           #f4f6f7;
+  --header-bg:    #1e2d35;
+  --header-text:  #f4f6f7;
+  --accent:       #3d6b7a;
+  --accent-light: #6a9eaa;
+  --poem-color:   #2e5f6e;
+  --trans-color:  #4a6741;
+  --bio-color:    #1e2d35;
+  --box-bg:       #f0f5f6;
+  --bio-bg:       #eaf1f3;
+  --text-muted:   #5a7080;
 }
-<style>
+
+/* ── Dark mode palette ── */
+body.dark {
+  --bg:           #111a1f;
+  --header-bg:    #0a1014;
+  --header-text:  #d0e4e8;
+  --accent:       #4e8fa0;
+  --accent-light: #7bb8c6;
+  --poem-color:   #6ab0c0;
+  --trans-color:  #7aab6e;
+  --bio-color:    #c8dde2;
+  --box-bg:       #1a272d;
+  --bio-bg:       #162028;
+  --text-muted:   #7a9eaa;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  background-color: var(--bg);
+  color: var(--bio-color);
   margin: 0;
   padding: 0;
   text-align: center;
+  animation: fadeIn 0.8s ease both;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Dark mode toggle ── */
+.theme-toggle {
+  position: fixed;
+  top: 18px;
+  right: 20px;
+  font-size: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 999;
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.2);
+}
+
+/* ── Header ── */
 h1 {
- background-color: #333;
-  color: white;
-  padding: 20px;
-  margin: 0; 
+  font-family: 'Playfair Display', Georgia, serif;
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  padding: 40px 30px 34px;
+  margin: 0;
+  font-size: 42px;
+  letter-spacing: 3px;
+  font-weight: 700;
+  position: relative;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
+h1::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background-color: var(--accent-light);
+  margin: 14px auto 0;
+}
+
+/* ── Intro text ── */
+p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--text-muted);
+  margin-top: 40px;
+}
+
+/* ── Author list ── */
 ul {
   list-style: none;
   padding: 0;
+  margin-top: 50px;
+  margin-bottom: 60px;
 }
 
 li {
-  margin: 15px 0;
+  margin: 44px 0;
 }
 
-a {
-  text-decoration: none;
-  color: #333;
-  font-size: 20px;
-  padding: 10px 20px;
-  border: 2px solid #333;
-  border-radius: 8px;
-  transition: 0.3s;
+/* ── Author row ── */
+.author-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
 }
-  background-color: #333;
+
+/* ── Author link ── */
+a.author-link {
+  text-decoration: none;
+  color: var(--accent);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px;
+  padding: 14px 34px;
+  border: 2px solid var(--accent);
+  border-radius: 4px;
+  letter-spacing: 1px;
+  display: inline-block;
+  transition: background-color 0.3s ease, color 0.3s ease, padding 0.3s ease;
+}
+
+a.author-link:hover {
+  background-color: var(--accent);
+  color: #fff;
+  padding-left: 44px;
+  padding-right: 44px;
+}
+
+/* ── About toggle button ── */
+.bio-toggle {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  background: transparent;
+  border: 1px solid var(--accent-light);
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.bio-toggle:hover,
+.bio-toggle.active {
+  background-color: var(--accent-light);
   color: white;
 }
 
+/* ── Bio box ── */
+.bio-box {
+  display: none;
+  margin: 16px auto 0;
+  padding: 24px 32px;
+  background-color: var(--bio-bg);
+  border-left: 3px solid var(--accent-light);
+  width: 90%;
+  max-width: 620px;
+  border-radius: 4px;
+  text-align: left;
+  line-height: 1.9;
+  animation: slideDown 0.35s ease both;
+  transition: background-color 0.4s ease;
+}
+
+.bio-box.bio-open {
+  display: block;
+}
+
+.bio-box p {
+  margin: 0;
+  color: var(--bio-color);
+  font-size: 16px;
+  font-style: normal;
+  margin-top: 0;
+}
+
+/* ── Clickable poem ── */
 p.clickable {
   cursor: pointer;
-  color: #0066cc;
-  font-size: 18px;
-  margin-top: 30px;
-}
-
-#Gaspara Stampa-details,
-#Arcangela Tarbotti-details,
-#Lucrezia Marinella-details {
+  color: var(--poem-color);
+  font-size: 20px;
   margin-top: 20px;
-  padding: 20px;
-  background-color: white;
-  width: 60%;
+  font-style: italic;
+  transition: opacity 0.3s ease;
+  width: 90%;
+  max-width: 620px;
   margin-left: auto;
   margin-right: auto;
-  border-radius: 10px;
-   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-button, a.back {
-  display: inline-block;
-  margin-top: 30px;
-  padding: 10px 20px;
-  background-color: #333;
-  color: white;
-  border-radius: 8px;
+p.clickable:hover {
+  opacity: 0.65;
 }
-</style>
+
+/* ── Details box ── */
+.details-box,
+[id$="-details"] {
+  margin-top: 12px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+  max-width: 620px;
+}
+
+.details-box:not(:empty),
+[id$="-details"]:not(:empty) {
+  padding: 28px 36px;
+  background-color: var(--box-bg);
+  border-radius: 6px;
+  box-shadow: 0 4px 22px rgba(30, 45, 53, 0.08);
+  line-height: 1.9;
+  font-size: 17px;
+  transition: background-color 0.4s ease;
+}
+
+.details-box h3,
+[id$="-details"] h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: normal;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  margin-bottom: 12px;
+  margin-top: 0;
+}
+
+.details-box p,
+[id$="-details"] p {
+  margin: 0;
+  font-size: 17px;
+  font-style: italic;
+  color: var(--poem-color);
+}
+
+.details-box.showing-translation p,
+[id$="-details"].showing-translation p {
+  color: var(--trans-color);
+}
+
+/* ── Copy button ── */
+.copy-btn {
+  display: block;
+  margin-top: 16px;
+  margin-left: auto;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  background: transparent;
+  border: 1px solid var(--accent-light);
+  border-radius: 4px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.copy-btn:hover {
+  background-color: var(--accent-light);
+  color: white;
+}
+
+/* ── Slide-in animation ── */
+.animate {
+  animation: slideDown 0.4s ease both;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Compare toggle button ── */
+.compare-toggle-row {
+  margin: 0 auto 40px;
+}
+
+.compare-toggle-btn {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  background: transparent;
+  border: 2px solid var(--accent);
+  border-radius: 4px;
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.compare-toggle-btn:hover {
+  background-color: var(--accent);
+  color: white;
+}
+
+/* ── Compare panel ── */
+.compare-panel {
+  display: none;
+  margin: 0 auto 60px;
+  width: 94%;
+  max-width: 900px;
+}
+
+.compare-panel.compare-open {
+  display: block;
+  animation: slideDown 0.4s ease both;
+}
+
+/* ── Author selectors ── */
+.compare-selectors {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.author-select {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 16px;
+  color: var(--bio-color);
+  background-color: var(--box-bg);
+  border: 1px solid var(--accent-light);
+  border-radius: 4px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.author-select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ── Swap button ── */
+.swap-btn {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: var(--accent-light);
+  background: transparent;
+  border: 1px solid var(--accent-light);
+  border-radius: 4px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.swap-btn:hover {
+  background-color: var(--accent-light);
+  color: white;
+}
+
+/* ── Lang toggle ── */
+.compare-lang-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.lang-btn {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  background: transparent;
+  border: 1px solid var(--accent-light);
+  border-radius: 4px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.lang-btn.active,
+.lang-btn:hover {
+  background-color: var(--accent-light);
+  color: white;
+}
+
+/* ── Compare button ── */
+.compare-btn {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  color: white;
+  background-color: var(--accent);
+  border: 2px solid var(--accent);
+  border-radius: 4px;
+  padding: 10px 28px;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.compare-btn:hover {
+  background-color: transparent;
+  color: var(--accent);
+}
+
+/* ── Compare grid ── */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  text-align: left;
+}
+
+.compare-card {
+  background-color: var(--box-bg);
+  border-radius: 6px;
+  padding: 28px 24px;
+  box-shadow: 0 4px 22px rgba(30, 45, 53, 0.07);
+  transition: background-color 0.4s ease;
+}
+
+.compare-card h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+
+.compare-card p {
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.9;
+  color: var(--poem-color);
+  margin: 0;
+}
+
+/* ── Error message ── */
+.compare-error {
+  color: var(--accent);
+  font-style: italic;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* ── Back button ── */
+a.back {
+  display: inline-block;
+  margin-top: 50px;
+  margin-bottom: 60px;
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  text-decoration: none;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  padding: 12px 28px;
+  border: 2px solid var(--header-bg);
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a.back:hover {
+  background-color: transparent;
+  color: var(--header-bg);
+}
+
+/* ── Responsive ── */
+@media (max-width: 650px) {
+  .compare-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .compare-selectors {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 28px;
+    padding: 28px 16px 22px;
+  }
+
+  .author-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  a.author-link {
+    font-size: 18px;
+    padding: 12px 24px;
+  }
+
+  .bio-box,
+  .details-box,
+  [id$="-details"] {
+    width: 94%;
+    padding: 20px;
+  }
+}
